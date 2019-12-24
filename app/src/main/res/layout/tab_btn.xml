@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_weight="1"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:foreground="@drawable/bg_ripple"
+
+    android:button="@null"
+    android:gravity="center"
+    android:padding="10dp"
+    android:textColor="@color/tab_colors"
+    android:textStyle="bold" />
+
+<!--
+ android:textIsSelectable="true"
+ android:background="?android:attr/selectableItemBackground"
+ android:background="?android:attr/listChoiceIndicatorSingle"
+ android:background="?android:attr/activatedBackgroundIndicator"
+-->

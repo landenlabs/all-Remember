@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_bottom"
+    app:startDestination="@id/fragGridViewDemo">
+
+    <fragment
+        android:label="@string/bottom_nav_frag_gridview"
+        android:id="@+id/fragGridViewDemo"
+        android:name="com.landenlabs.all_remember.FragNumbers"
+        tools:layout="@layout/frag_numbers"/>
+
+    <fragment
+        android:label="@string/bottom_nav_frag_divider"
+        android:id="@+id/fragDividerDemo"
+        android:name="com.landenlabs.all_remember.FragPage2"
+        tools:layout="@layout/frag_page2"/>
+
+    <fragment
+        android:label="@string/bottom_nav_expand"
+        android:id="@+id/fragExpandDemo"
+        android:name="com.landenlabs.all_remember.FragPage3"
+        tools:layout="@layout/frag_page3"/>
+
+</navigation>

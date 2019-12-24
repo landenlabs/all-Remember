@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".FragBottomNavMain">
+
+   <fragment
+       android:layout_above="@+id/bottomNavigation"
+       android:id="@+id/bottomNavFragment"
+       android:name="androidx.navigation.fragment.NavHostFragment"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       app:defaultNavHost="true"
+       app:navGraph="@navigation/nav_bottom"/>
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_alignParentBottom="true"
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimary"
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/text_light"
+        app:itemTextColor="@color/text_light"
+        app:menu="@menu/menu_bottom" />
+
+    <!-- Alternate bottom nav
+    <HorizontalScrollView
+        android:layout_alignParentBottom="true"
+        android:id="@+id/bottomNavigation"
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioGroup
+            android:id="@+id/tabHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:divider="?android:attr/dividerHorizontal"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:showDividers="middle" >
+
+
+            <RadioButton
+                android:layout_weight="1"
+                android:text="test1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <RadioButton
+                android:text="test2"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+        </RadioGroup>
+    </HorizontalScrollView>
+    -->
+
+</RelativeLayout>

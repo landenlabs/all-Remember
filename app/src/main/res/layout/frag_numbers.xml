@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_page"
+    android:orientation="vertical"
+    tools:context=".FragNumbers">
+
+
+    <TextView
+        android:id="@+id/page1_btn_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/divider_uline"
+        android:gravity="center|bottom"
+        android:paddingTop="20dp"
+        android:text="Remember Numbers"
+        android:textColor="@color/text_on_bg"
+        android:textSize="28sp" />
+
+
+    <RelativeLayout
+        android:background="@drawable/bg_round"
+        android:padding="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <ImageView
+            android:layout_alignStart="@+id/digits"
+            android:layout_alignEnd="@+id/digits"
+            android:layout_alignBottom="@+id/digits"
+            android:layout_alignTop="@+id/digits"
+            android:src="@drawable/digits6"
+            android:scaleType="fitXY"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            />
+
+        <TextView
+            android:id="@+id/digits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="123456"
+            android:textColor="#000"
+            android:textSize="50sp"
+            android:typeface="monospace" />
+
+    </RelativeLayout>
+
+    <!--
+    7 8 9
+    4 5 6
+    1 2 3
+    0 x C
+    -->
+
+    <GridLayout
+        android:id="@+id/numpad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:background="#ccc"
+        android:columnCount="3"
+        android:padding="2dp"
+        android:rowCount="4" />
+
+    <Button
+        android:background="@drawable/btn_states"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/text_on_bg"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:text="Done"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <LinearLayout
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        >
+        <ImageButton
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/btn_play_arrow"
+            />
+
+        <ImageButton
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/btn_pause"
+            />
+
+        <ImageButton
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/btn_stop"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:background="#4000"
+        android:textSize="28sp"
+        android:textColor="@color/text_on_bg"
+        android:gravity="right"
+        android:text="12.2 sec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        />
+
+</LinearLayout>

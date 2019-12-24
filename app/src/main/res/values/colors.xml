@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="text_light">#ffff</color>
+    <color name="text_dark">#f000</color>
+    <color name="text_on_bg">#ffff</color>
+
+    <color name="bg_round_fill">#8fff</color>
+    <color name="bg_round_border">#ddd</color>
+    <color name="cell_icon_fill">#ffff</color>
+    <color name="tab_fill">#f000</color>
+</resources>

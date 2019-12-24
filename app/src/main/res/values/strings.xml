@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">all-Remember</string>
+    <string name="bottomnav_menu_title">Remember Pages</string>
+    <string name="about_menu_title">About</string>
+
+    <string name="bottom_nav_frag_gridview">Numbers</string>
+    <string name="bottom_nav_frag_divider">States</string>
+    <string name="bottom_nav_expand">Capitals</string>
+
+    <string name="about_text">Memorize numbers, etc.\n\nSource code on github at https://landenlabs.com/android\n\nCopyright Dennis Lang 2019</string>
+    <string name="side_nav_header_1">All Remember</string>
+
+
+    <string name="setting_menu_1">Settings Menu 1</string>
+    <string name="setting_menu_2">Settings Menu 2</string>
+    <string name="setting_menu_3">Settings Menu 3</string>
+</resources>

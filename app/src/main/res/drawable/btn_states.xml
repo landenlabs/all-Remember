@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- has to be first
+    <item android:state_pressed="true"
+        android:drawable="@drawable/ripple_boarderless" />
+    -->
+
+    <!-- <item android:state_focused="true"  android:drawable="@color/focused_color"/> -->
+    <!-- android:tint="?attr/colorControlActivated" -->
+    <item  android:state_pressed="true">
+        <nine-patch android:src="@drawable/underline2"  />
+    </item>
+
+    <!--
+    @drawable/abc_textfield_activated_mtrl_alpha
+    <item android:drawable="@color/default_color"/>
+     <nine-patch android:src="@drawable/shadow7" />
+    -->
+    <item>
+        <nine-patch android:src="@drawable/shadow7" />
+    </item>
+</selector>
