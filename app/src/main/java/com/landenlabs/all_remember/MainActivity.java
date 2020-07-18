@@ -83,13 +83,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-        intentAction = getIntent() != null ? getIntent().getAction() : null;
-        Log.d(TAG, String.format(Locale.US, "indent action=%s", intentAction));
-        if (action1.equals(intentAction)) {
-            // TODO - Implement shortcut intent launching.
-        }
     }
 
     @Override

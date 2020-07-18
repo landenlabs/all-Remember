@@ -36,15 +36,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class FragBottomNavMain extends FragBottomNavBase
         /* implements  View.OnClickListener */ {
 
-    protected View root;
-    protected NavController navController;
-    protected NavGraph bottomNavGraph;
+    private View root;
+    private NavController navController;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-    ViewGroup container, Bundle savedInstanceState) {
+            ViewGroup container, Bundle savedInstanceState) {
         root =  inflater.inflate(R.layout.frag_bottom_nav_main, container, false);
         navController = Navigation.findNavController(requireActivity(), R.id.sideNavFragment);
-        bottomNavGraph = navController.getNavInflater().inflate(R.navigation.nav_bottom);
+        NavGraph bottomNavGraph = navController.getNavInflater().inflate(R.navigation.nav_bottom);
         return root;
     }
     @Override
