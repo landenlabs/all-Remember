@@ -38,20 +38,7 @@
        app:defaultNavHost="true"
        app:navGraph="@navigation/nav_bottom"/>
 
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:layout_alignParentBottom="true"
-        android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/colorPrimary"
-        app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/text_light"
-        app:itemTextColor="@color/text_light"
-        app:menu="@menu/menu_bottom" />
-
-    <!-- Alternate bottom nav
+    <!-- Alternate bottom nav -->
     <HorizontalScrollView
         android:layout_alignParentBottom="true"
         android:id="@+id/bottomNavigation"
@@ -63,7 +50,7 @@
             android:id="@+id/tabHolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fff"
+            android:background="@color/text_light"
             android:divider="?android:attr/dividerHorizontal"
             android:orientation="horizontal"
             android:padding="10dp"
@@ -83,6 +70,5 @@
                 android:layout_height="match_parent" />
         </RadioGroup>
     </HorizontalScrollView>
-    -->
 
 </RelativeLayout>

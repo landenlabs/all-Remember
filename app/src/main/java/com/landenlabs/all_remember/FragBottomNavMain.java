@@ -1,28 +1,42 @@
-package com.landenlabs.all_remember;
-
 /*
- * Copyright (C) 2019 Dennis Lang (landenlabs@gmail.com)
+ * Copyright (c) 2020 Dennis Lang (LanDen Labs) landenlabs@gmail.com
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * The above copyright notice and this permission notice shall be included in all copies or substantial
+ * portions of the Software.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+ * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+ * NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * @author Dennis Lang
+ * @see http://LanDenLabs.com/
  */
 
+package com.landenlabs.all_remember;
+
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
@@ -34,71 +48,66 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
  * A simple [Fragment] subclass.
  */
 public class FragBottomNavMain extends FragBottomNavBase
-        /* implements  View.OnClickListener */ {
+         implements  View.OnClickListener  {
 
-    private View root;
-    private NavController navController;
+    private ViewGroup root;
+
+    private final boolean useRadioBottomBar = true;
+    private final int LAYOUT_RES = useRadioBottomBar ? R.layout.frag_bottom_rg_nav_main : R.layout.frag_bottom_nav_main;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
-        root =  inflater.inflate(R.layout.frag_bottom_nav_main, container, false);
-        navController = Navigation.findNavController(requireActivity(), R.id.sideNavFragment);
-        NavGraph bottomNavGraph = navController.getNavInflater().inflate(R.navigation.nav_bottom);
+        root = (ViewGroup)inflater.inflate(LAYOUT_RES, container, false);
+        // NavController navSideController = Navigation.findNavController(requireActivity(), R.id.sideNavFragment);
         return root;
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (false) {
+        if (useRadioBottomBar) {
             // Setup custom bottom navigation
-            /*
+        
             RadioGroup navBar = root.findViewById(R.id.tabHolder);
-            PopupMenu popupMenu = new PopupMenu(getContext(), null);
-            getActivitySafe().getMenuInflater().inflate(R.menu.menu_bottom, popupMenu.getMenu());
+            PopupMenu popupMenu = new PopupMenu(requireActivity(), root);
+            requireActivity().getMenuInflater().inflate(R.menu.menu_bottom, popupMenu.getMenu());
             addTabBar(navBar, popupMenu.getMenu());
-             */
+           
         } else {
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.bottomNavFragment);
-            BottomNavigationView bottomNavigation = view.findViewById(R.id.bottomNavigation);
-            NavigationUI.setupWithNavController(bottomNavigation, navController);
+            // Setup bottom navigation
+            // NavGraph bottomNavGraph = navController.getNavInflater().inflate(R.navigation.nav_bottom);
+            NavController bottomNavController = Navigation.findNavController(requireActivity(), R.id.bottomNavFragment);
+            BottomNavigationView bottomNavView = view.findViewById(R.id.bottomNavigation);
+            NavigationUI.setupWithNavController(bottomNavView, bottomNavController);
         }
     }
 
-    /*
+  
     @Override
     public void onClick(View view) {
         changePage(view.getId());
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public boolean changePage(int id) {
-        switch (id) {
-            case R.id.bottomNavFragmentOne:
-                navController.navigate(R.id.bottomNavFragmentOne);
-                return true;
-            case R.id.bottomNavFragmentTwo:
-                navController.navigate(R.id.bottomNavFragmentTwo);
-                return true;
-            case R.id.bottomNavFragmentThree:
-                navController.navigate(R.id.bottomNavFragmentThree);
-                return true;
-        }
-
-        return false;
+    private void changePage(int id) {
+        NavController navBotController = Navigation.findNavController(requireActivity(), R.id.bottomNavFragment);
+        navBotController.navigate(id);
     }
+
+    private ColorStateList colorGrey = new ColorStateList(
+            new int[][]{ new int[]{}},
+            new int[]{Color.GRAY }
+    	);
 
     // ---------------------------------------------------------------------------------------------
     // Alternate bottom nav bar
 
-    void addTabBar(@NonNull RadioGroup tabHolder, @NonNull Menu menu) {
-        Context context = tabHolder.getContext();
+    private void addTabBar(@NonNull RadioGroup tabHolder, @NonNull Menu menu) {
         tabHolder.removeAllViews();
         RadioGroup.LayoutParams lp = new RadioGroup.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         lp.weight = 1;
 
         for (int idx = 0; idx < menu.size(); idx++) {
-            RadioButton button = (RadioButton)getLayoutInflater().inflate(R.layout.tab_btn, null);
+            RadioButton button = (RadioButton)getLayoutInflater().inflate(R.layout.tab_btn, root, false);
             MenuItem item = menu.getItem(idx);
             Drawable tabBtnIcon = null;
             try {
@@ -110,13 +119,11 @@ public class FragBottomNavMain extends FragBottomNavBase
             if (tabBtnIcon != null) {
                 button.setId(item.getItemId());
                 button.setText(item.getTitle());
-                if (tabBtnIcon != null) {
-                    button.setCompoundDrawablesWithIntrinsicBounds(null, tabBtnIcon, null, null);
-                }
+                button.setCompoundDrawableTintList(colorGrey);
+                button.setCompoundDrawablesWithIntrinsicBounds(null, tabBtnIcon, null, null);
                 button.setOnClickListener(this);
                 tabHolder.addView(button, lp);
             }
         }
     }
-     */
 }

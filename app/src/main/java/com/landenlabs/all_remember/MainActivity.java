@@ -1,20 +1,25 @@
-package com.landenlabs.all_remember;
-
 /*
- * Copyright (C) 2019 Dennis Lang (landenlabs@gmail.com)
+ * Copyright (c) 2020 Dennis Lang (LanDen Labs) landenlabs@gmail.com
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * The above copyright notice and this permission notice shall be included in all copies or substantial
+ * portions of the Software.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+ * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+ * NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * @author Dennis Lang
+ * @see http://LanDenLabs.com/
  */
+
+package com.landenlabs.all_remember;
 
 import android.content.Intent;
 import android.content.pm.ShortcutInfo;
@@ -24,8 +29,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -44,6 +52,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Main activity for All-Remember which demonstrates cell expansion and dividers.
+ */
 @SuppressWarnings("Convert2Lambda")
 public class MainActivity extends AppCompatActivity {
 
@@ -61,33 +72,35 @@ public class MainActivity extends AppCompatActivity {
 
         navSideController = Navigation.findNavController(this, R.id.sideNavFragment);
 
-
         // Set up ActionBar
         DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         NavigationUI.setupActionBarWithNavController(this, navSideController, drawerLayout);
 
-        // Set up navigation menu
-        NavigationView navigationView = findViewById(R.id.navigationView);
-        NavigationMenuView navMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+        // Set up side navigation draw menu
+        NavigationView navSideView = findViewById(R.id.navSideView);
+        NavigationMenuView navMenuView = (NavigationMenuView) navSideView.getChildAt(0);
         navMenuView.addItemDecoration(new DividerItemDecoration(MainActivity.this,DividerItemDecoration.VERTICAL));
-        NavigationUI.setupWithNavController(navigationView, navSideController);
+        NavigationUI.setupWithNavController(navSideView, navSideController);
 
-        navigationView.post(new Runnable() {
+        // Setup shortcuts for Bottom Nav items.
+        navSideView.post(new Runnable() {
             @Override
             public void run() {
-                BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+                ViewGroup bottomNavigationView = findViewById(R.id.bottomNavigation);
                 if (bottomNavigationView != null) {
-                    addShortcut(bottomNavigationView);
+                    addOrExecuteShortcut(bottomNavigationView);
                 }
             }
         });
+        intentAction = getIntent() != null ? getIntent().getAction() : null;
+        Log.d(TAG, String.format(Locale.US, "indent action=%s", intentAction));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate  menu, adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_side, menu);
         return true;
     }
@@ -99,15 +112,30 @@ public class MainActivity extends AppCompatActivity {
                 Navigation.findNavController(this, R.id.sideNavFragment), drawerLayout);
     }
 
-    private static final String action1= "action1";
-    private void addShortcut( BottomNavigationView bottomNavigationView) {
+    /**
+     * Add or execute short cut
+     */
+    @SuppressWarnings("ConstantConditions")
+    private void addOrExecuteShortcut(@NonNull ViewGroup bottomNavGroup) {
         if (android.os.Build.VERSION.SDK_INT <android.os.Build.VERSION_CODES.N_MR1)
             return;
 
-        int menuSize = bottomNavigationView.getMenu().size();
-        Map<String, MenuItem> menus = new HashMap<>(menuSize);
+        Map<String, MenuItem> menus;
+        Menu menu;
+
+        if (bottomNavGroup instanceof BottomNavigationView) {
+            BottomNavigationView bottomNavigationView = (BottomNavigationView)bottomNavGroup;
+            menu = bottomNavigationView.getMenu();
+        } else {
+            PopupMenu popupMenu = new PopupMenu(this, bottomNavGroup.getRootView());
+            getMenuInflater().inflate(R.menu.menu_bottom, popupMenu.getMenu());
+            menu = popupMenu.getMenu();
+        }
+
+        int menuSize = menu.size();
+        menus = new HashMap<>(menuSize);
         for (int menuIdx = 0; menuIdx < menuSize; menuIdx++) {
-            MenuItem menuItem = bottomNavigationView.getMenu().getItem(menuIdx);
+            MenuItem menuItem = menu.getItem(menuIdx);
             menus.put(menuItem.getTitle().toString(), menuItem);
         }
 
@@ -133,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                 shortcutList.add(postShortcut);
 
                 if (navDestination.getLabel().equals(intentAction)) {
+                    // Execute shortcut
                     navBotController.navigate(navDestination.getId());
                 }
             }
