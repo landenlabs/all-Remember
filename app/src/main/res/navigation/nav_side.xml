@@ -37,4 +37,23 @@
         android:name="com.landenlabs.all_remember.AboutFragment"
         android:label="About"
         tools:layout="@layout/frag_about" />
+
+    <!-- From nav_bottom.xml -->
+    <fragment
+        android:label="@string/bottom_nav_frag_gridview"
+        android:id="@+id/fragGridViewDemo"
+        android:name="com.landenlabs.all_remember.FragNumbers"
+        tools:layout="@layout/frag_numbers"/>
+
+    <fragment
+        android:label="@string/bottom_nav_frag_divider"
+        android:id="@+id/fragDividerDemo"
+        android:name="com.landenlabs.all_remember.FragPage2"
+        tools:layout="@layout/frag_page2"/>
+
+    <fragment
+        android:label="@string/bottom_nav_expand"
+        android:id="@+id/fragExpandDemo"
+        android:name="com.landenlabs.all_remember.FragPage3"
+        tools:layout="@layout/frag_page3"/>
 </navigation>

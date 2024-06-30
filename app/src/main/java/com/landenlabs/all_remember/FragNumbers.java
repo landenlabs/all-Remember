@@ -37,7 +37,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,6 +47,7 @@ import static android.content.Context.VIBRATOR_SERVICE;
 
 /**
  * Sample fragment demonstrate GridView with expanding cell and callouts.
+ * @noinspection FieldCanBeLocal
  */
 public class FragNumbers extends FragBottomNavBase implements View.OnClickListener {
 
@@ -66,7 +66,7 @@ public class FragNumbers extends FragBottomNavBase implements View.OnClickListen
     private int value = 0;
     private int target = 0;
 
-    private int DIGITS = 6;
+    private final int DIGITS = 6;
     private int MAX_VAL = 10;
 
     private static final int DEL = -1;
@@ -78,28 +78,28 @@ public class FragNumbers extends FragBottomNavBase implements View.OnClickListen
             1 2 3
             0 x C
      */
-    private int[] nums = { 7, 8, 9, 4, 5, 6, 1, 2, 3, 0, DEL, CLR};
+    private final int[] nums = { 7, 8, 9, 4, 5, 6, 1, 2, 3, 0, DEL, CLR};
     private int rowHeightPx;
     private static final int NUMPAD_COL = 3;
     private MediaPlayer soundError;
     private MediaPlayer soundClick;
     private MediaPlayer soundGreat;
 
-    private boolean isRunning = false;
+    private final boolean isRunning = false;
 
-    private ColorStateList colorGreen = new ColorStateList(
+    private final ColorStateList colorGreen = new ColorStateList(
             new int[][]{ new int[]{}},
             new int[]{  0xff00ff00 }    // GREEN
     );
-    private ColorStateList colorOrange = new ColorStateList(
+    private final ColorStateList colorOrange = new ColorStateList(
             new int[][]{ new int[]{}},
             new int[]{  0xffFFA500 }    // Orange
     );
-    private ColorStateList colorRed = new ColorStateList(
+    private final ColorStateList colorRed = new ColorStateList(
             new int[][]{ new int[]{}},
             new int[]{  Color.RED }
     );
-    private ColorStateList colorWhite = new ColorStateList(
+    private final ColorStateList colorWhite = new ColorStateList(
             new int[][]{ new int[]{}},
             new int[]{  Color.WHITE }
     );
@@ -136,7 +136,8 @@ public class FragNumbers extends FragBottomNavBase implements View.OnClickListen
         return root;
     }
 
-    enum PlayMode { STOP, PAUSE, RUNNING };
+    enum PlayMode { STOP, PAUSE, RUNNING }
+
     PlayMode playMode = PlayMode.STOP;
     void setPlayBtns(PlayMode playMode) {
         this.playMode = playMode;
@@ -239,23 +240,23 @@ public class FragNumbers extends FragBottomNavBase implements View.OnClickListen
         return textView;
     }
 
-    long SHOW_NUM_MILLI = 2000;
-    long CLOCK_STEP = 500;
-    long elpasedMilli = 0;
+    final long SHOW_NUM_MILLI = 2000;
+    final long CLOCK_STEP = 500;
+    long elapsedMilli = 0;
 
-    Runnable clock = new Runnable() {
+    final Runnable clock = new Runnable() {
         @Override
         public void run() {
-            elpasedMilli += CLOCK_STEP;
-            secondsTv.setText(String.format(Locale.US, "%.1f sec", elpasedMilli/1000f));
+            elapsedMilli += CLOCK_STEP;
+            secondsTv.setText(String.format(Locale.US, "%.1f sec", elapsedMilli /1000f));
             secondsTv.postDelayed(clock, CLOCK_STEP);
         }
     };
 
-    Runnable newNumberRunnable = new Runnable() {
+    final Runnable newNumberRunnable = new Runnable() {
         @Override
         public void run() {
-            elpasedMilli = 0;
+            elapsedMilli = 0;
             secondsTv.setText("");
             newNumber();
         }
@@ -272,42 +273,46 @@ public class FragNumbers extends FragBottomNavBase implements View.OnClickListen
         value = 0;
         digitsTv.setText(getStr(value) );
 
-        digitsTv.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                digitsHolder.setVisibility(View.VISIBLE);
-                targetHolder.setVisibility(View.GONE);
-                elpasedMilli = 0;
-                secondsTv.postDelayed(clock, CLOCK_STEP);
-            }
+        digitsTv.postDelayed(() -> {
+            digitsHolder.setVisibility(View.VISIBLE);
+            targetHolder.setVisibility(View.GONE);
+            elapsedMilli = 0;
+            secondsTv.postDelayed(clock, CLOCK_STEP);
         }, SHOW_NUM_MILLI);
     }
 
     @Override
     public void onClick(View view) {
 
-        switch (view.getId()) {
-            case R.id.play_btn:
-                setPlayBtns(PlayMode.RUNNING);
-                newNumber();
-                return;
-            case R.id.pause_btn:
-                if (this.playMode != PlayMode.RUNNING)  return;
-                setPlayBtns(PlayMode.PAUSE);
-                secondsTv.removeCallbacks(clock);
-                return;
-            case R.id.done_btn:
-                if (this.playMode != PlayMode.RUNNING)  return;
-                numPad.setVisibility(View.GONE);
-                targetHolder.setVisibility(View.VISIBLE);
-                // return;
-            case R.id.stop_btn:
-                if (this.playMode != PlayMode.RUNNING)  return;
-                setPlayBtns(PlayMode.STOP);
-                secondsTv.removeCallbacks(clock);
-                elpasedMilli = 0;
-                secondsTv.setText("");
-                return;
+        int id = view.getId();
+        if (id == R.id.play_btn) {
+            setPlayBtns(PlayMode.RUNNING);
+            newNumber();
+            return;
+        } else if (id == R.id.pause_btn) {
+            if (this.playMode != PlayMode.RUNNING) return;
+            setPlayBtns(PlayMode.PAUSE);
+            secondsTv.removeCallbacks(clock);
+            return;
+        } else if (id == R.id.done_btn) {
+            if (this.playMode != PlayMode.RUNNING) return;
+            numPad.setVisibility(View.GONE);
+            targetHolder.setVisibility(View.VISIBLE);
+            // return;
+
+            if (this.playMode != PlayMode.RUNNING) return;
+            setPlayBtns(PlayMode.STOP);
+            secondsTv.removeCallbacks(clock);
+            elapsedMilli = 0;
+            secondsTv.setText("");
+            return;
+        } else if (id == R.id.stop_btn) {
+            if (this.playMode != PlayMode.RUNNING) return;
+            setPlayBtns(PlayMode.STOP);
+            secondsTv.removeCallbacks(clock);
+            elapsedMilli = 0;
+            secondsTv.setText("");
+            return;
         }
 
         if (view.getTag(R.id.tag_numpad) != null) {

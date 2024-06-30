@@ -21,8 +21,6 @@
 
 package com.landenlabs.all_remember;
 
-import android.app.Activity;
-import android.content.Context;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.view.LayoutInflater;
@@ -37,7 +35,6 @@ import com.google.android.material.appbar.AppBarLayout;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.Objects;
 
 /**
  * Abstract base fragment used with Bottom navigation layout.

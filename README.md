@@ -1,6 +1,6 @@
 # LanDen Labs - All Remember
 Android Quiz Remebering numbers
-<br>[Home website](http://landenlabs.com/android/index.html)
+<br>[Home website](https://landenlabs.com/android/index.html)
 
 **Simple Number Challenge**
 
@@ -13,7 +13,7 @@ PROGRAM NOT READY YET !!
 
 ## Web Linkds
 
-[Wiki link](http://landenlabs.com/android/index.html) for more information.
+[Wiki link](https://landenlabs.com/android/index.html) for more information.
 
 
 ## License
@@ -36,4 +36,4 @@ limitations under the License.
 
 
 [To Top](#table)
-<br>[Home website](http://landenlabs.com/android/index.html)
+<br>[Home website](https://landenlabs.com/android/index.html)

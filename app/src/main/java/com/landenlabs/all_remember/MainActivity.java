@@ -21,6 +21,9 @@
 
 package com.landenlabs.all_remember;
 
+import static utils.SysUtil.getNavController;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
@@ -70,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        navSideController = Navigation.findNavController(this, R.id.sideNavFragment);
+        navSideController = getNavController(this, R.id.sideNavFragment);
+        // navSideController = Navigation.findNavController(this, R.id.sideNavFragment);
 
         // Set up ActionBar
         DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
@@ -80,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up side navigation draw menu
         NavigationView navSideView = findViewById(R.id.navSideView);
+        @SuppressLint("RestrictedApi")
         NavigationMenuView navMenuView = (NavigationMenuView) navSideView.getChildAt(0);
         navMenuView.addItemDecoration(new DividerItemDecoration(MainActivity.this,DividerItemDecoration.VERTICAL));
         NavigationUI.setupWithNavController(navSideView, navSideController);
