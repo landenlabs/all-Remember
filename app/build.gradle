@@ -6,13 +6,13 @@ plugins {
 }
 
 android {
-    compileSdk  34
+    compileSdk  35
     namespace "com.landenlabs.all_remember"
 
     defaultConfig {
         applicationId "com.landenlabs.all_remember"
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 35
 
         versionCode 20630
         versionName "2.06.30"
@@ -44,6 +44,8 @@ android {
         android.signingConfigs.release.keyPassword = props.keyAliasPassword
         println("Setting release to " + signingConfigs.release.storeFile.absolutePath )
     }
+
+    buildFeatures.buildConfig = true
 
     buildTypes {
         release {
@@ -87,19 +89,19 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
 
-    implementation 'androidx.navigation:navigation-fragment:2.7.7'
-    implementation 'androidx.navigation:navigation-ui:2.7.7'
+    implementation 'androidx.navigation:navigation-fragment:2.9.0'
+    implementation 'androidx.navigation:navigation-ui:2.9.0'
 
     testImplementation "junit:junit:4.13.2"
-    androidTestImplementation "androidx.test:runner:1.6.1"
+    androidTestImplementation "androidx.test:runner:1.6.2"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.6.1"
 }
 
 // Rename app
 android.applicationVariants.configureEach { variant ->
     variant.outputs.configureEach {
-        def ourname = project.parent.name
-        outputFileName = "$ourname-${variant.name}-${variant.versionName}.apk"
+        def ourName = project.parent.name
+        outputFileName = "$ourName-${variant.name}-${variant.versionName}.apk"
         println "out name= $outputFileName"
     }
 }
