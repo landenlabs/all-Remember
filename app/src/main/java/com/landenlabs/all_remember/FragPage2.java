@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Dennis Lang (LanDen Labs) landenlabs@gmail.com
+ * Copyright (c) 2026 Dennis Lang (LanDen Labs)
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -26,11 +26,14 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuCompat;
+import androidx.core.view.MenuProvider;
+import androidx.lifecycle.Lifecycle;
 
 /**
  * A simple [Fragment] subclass.
@@ -40,15 +43,27 @@ public class FragPage2 extends FragBottomNavBase {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, R.layout.frag_page2);
-        this.setHasOptionsMenu(true);
         setBarTitle("Layouts with Dividers");
+
+        requireActivity().addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                MenuCompat.setGroupDividerEnabled(menu, true);
+                menuInflater.inflate(R.menu.menu_settings, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+
         return root;
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        MenuCompat.setGroupDividerEnabled(menu, true);
-        inflater.inflate(R.menu.menu_settings, menu);
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        // Deprecated - using MenuProvider in onCreateView
     }
 
     @Override

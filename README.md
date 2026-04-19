@@ -1,5 +1,11 @@
 # LanDen Labs - All Remember
-Android Quiz Remebering numbers
+<br>18-Arp-2026
+<br>API 36 AndroidX Java
+<br>[Home website](https://landenlabs.com/android/index.html)
+
+<img src="screenshots/landenlabs.webp" width="300" alt="Logo">
+
+Android Quiz Remembering numbers
 <br>[Home website](https://landenlabs.com/android/index.html)
 
 **Simple Number Challenge**

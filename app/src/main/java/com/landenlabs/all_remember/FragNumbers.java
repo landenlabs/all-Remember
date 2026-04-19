@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Dennis Lang (LanDen Labs) landenlabs@gmail.com
+ * Copyright (c) 2026 Dennis Lang (LanDen Labs)
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -26,12 +26,15 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.os.VibratorManager;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -40,10 +43,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.MenuProvider;
+import androidx.lifecycle.Lifecycle;
 
 import java.util.Locale;
-
-import static android.content.Context.VIBRATOR_SERVICE;
 
 /**
  * Sample fragment demonstrate GridView with expanding cell and callouts.
@@ -129,6 +132,18 @@ public class FragNumbers extends FragBottomNavBase implements View.OnClickListen
 
         setup();
 
+        requireActivity().addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menu.clear();
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+
         MAX_VAL = (int)Math.pow(10, DIGITS);
         setPlayBtns(PlayMode.STOP);
         targetHolder.setVisibility(View.GONE);
@@ -163,8 +178,7 @@ public class FragNumbers extends FragBottomNavBase implements View.OnClickListen
     }
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        menu.clear();
-        // See setHasOptionsMen(true)
+        // Deprecated - using MenuProvider in onCreateView
     }
 
     private void setup() {
@@ -176,7 +190,12 @@ public class FragNumbers extends FragBottomNavBase implements View.OnClickListen
 
         soundError = MediaPlayer.create(requireContext(), R.raw.alert_pling);
         soundGreat = MediaPlayer.create(requireContext(), R.raw.tada);
-        vibrator = (Vibrator) requireContext().getSystemService(VIBRATOR_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            VibratorManager vibratorManager = (VibratorManager) requireContext().getSystemService(android.content.Context.VIBRATOR_MANAGER_SERVICE);
+            vibrator = vibratorManager.getDefaultVibrator();
+        } else {
+            vibrator = (Vibrator) requireContext().getSystemService(android.content.Context.VIBRATOR_SERVICE);
+        }
 
         // GridView.LayoutParams lp = new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, rowHeightPx);
         rowHeightPx = requireContext().getResources().getDimensionPixelSize(R.dimen.page_row_height);
@@ -317,7 +336,11 @@ public class FragNumbers extends FragBottomNavBase implements View.OnClickListen
 
         if (view.getTag(R.id.tag_numpad) != null) {
             if (this.playMode != PlayMode.RUNNING)  return;
-            vibrator.vibrate(30);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(30, VibrationEffect.DEFAULT_AMPLITUDE));
+            } else {
+                vibrator.vibrate(30);
+            }
             digitsTv.setBackgroundColor(ANY_NUM_COLOR);
 
             int num = (Integer)view.getTag(R.id.tag_numpad);

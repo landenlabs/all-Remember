@@ -1,107 +1,117 @@
 // All-Remember
 
 plugins {
-    id ("com.android.application")
-    id ("org.jetbrains.kotlin.android") // Prevents duplicate kotlin warnings
+    id("com.android.application")
 }
 
 android {
-    compileSdk  35
-    namespace "com.landenlabs.all_remember"
+    namespace = "com.landenlabs.all_remember"
+    compileSdk = 36
 
     defaultConfig {
-        applicationId "com.landenlabs.all_remember"
-        minSdkVersion 23
-        targetSdkVersion 35
+        applicationId = "com.landenlabs.all_remember"
+        minSdk = 23
+        targetSdk = 36
 
-        versionCode 20630
-        versionName "2.06.30"
+        versionCode = 60420
+        versionName = '6.04.20' // 2026 April(04) 19th
+        // Restore the versionName resource for layouts
+        resValue "string", "versionName", "v" + versionName
 
         // Limit languages to following list.
-        resourceConfigurations += ['en', 'es']
+        resourceConfigurations += ["en", "es"]
 
-        buildConfigField "long", "BuildTimeMilli", System.currentTimeMillis() + "L"
+        buildConfigField("long", "BuildTimeMilli", "${System.currentTimeMillis()}L")
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    applicationVariants.configureEach { variant ->
-        variant.resValue "string", "versionName", "version " + variant.versionName
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
-        release
+        create("release") {
+            // Configuration loaded below
+        }
     }
 
-    // Load signing config (does not work for command line builds)
-    // println("Setting release=${rootDir}/release.properties")
+    // Load signing config
     if (file("${rootDir}/release.properties").exists()) {
         def props = new Properties()
         props.load(new FileInputStream(file("${rootDir}/release.properties")))
-        android.signingConfigs.release.storeFile = file(props.keyStore)
-        android.signingConfigs.release.storePassword = props.keyStorePassword
-        android.signingConfigs.release.keyAlias = props.keyAlias
-        android.signingConfigs.release.keyPassword = props.keyAliasPassword
-        println("Setting release to " + signingConfigs.release.storeFile.absolutePath )
+        signingConfigs.release.storeFile = file(props.keyStore)
+        signingConfigs.release.storePassword = props.keyStorePassword
+        signingConfigs.release.keyAlias = props.keyAlias
+        signingConfigs.release.keyPassword = props.keyAliasPassword
+        println("Setting release to " + signingConfigs.release.storeFile.absolutePath)
     }
 
-    buildFeatures.buildConfig = true
+    buildFeatures {
+        buildConfig = true
+        resValues = true
+    }
 
     buildTypes {
         release {
-            // Enables code shrinking, obfuscation, and optimization.
-            minifyEnabled true
-
-            // List of resources removed at end of generated mapping file:
-            // grep unused ./app/build/outputs/mapping/demoRelease/resources.txt
-            shrinkResources true
-
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            minifyEnabled = true
+            shrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.release
 
             ndk {
-                // abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-                abiFilters 'armeabi-v7a', 'arm64-v8a'
+                abiFilters += ["armeabi-v7a", "arm64-v8a"]
             }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
         }
     }
 
     gradle.projectsEvaluated {
-        tasks.withType(JavaCompile).tap {
-            configureEach {
-                // Enable verbose lint reporting during build.
-                options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-            }
+        tasks.withType(JavaCompile).configureEach {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
         }
     }
 
     lint {
-        abortOnError false
-        disable 'DefaultLocale', 'SimpleDateFormat', 'InflateParams', 'SpUsage',
-                'UseCompoundDrawables', 'HandlerLeak', 'ViewConstructor', 'SetTextI18n',
-                'RtlSymmetry', 'RtlHardcoded', 'ContentDescription',
-                'MissingTranslation', 'ValidFragment', 'UnusedAttribute',
-                'FieldCanBeLocal', 'LocalSuppress', 'HardcodedText', 'Typos'
+        abortOnError = false
+        disable += [
+                "DefaultLocale", "SimpleDateFormat", "InflateParams", "SpUsage",
+                "UseCompoundDrawables", "HandlerLeak", "ViewConstructor", "SetTextI18n",
+                "RtlSymmetry", "RtlHardcoded", "ContentDescription",
+                "MissingTranslation", "ValidFragment", "UnusedAttribute",
+                "FieldCanBeLocal", "LocalSuppress", "HardcodedText", "Typos"
+        ]
     }
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'com.google.android.material:material:1.12.0'
+    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("com.google.android.material:material:1.13.0")
 
-    implementation 'androidx.navigation:navigation-fragment:2.9.0'
-    implementation 'androidx.navigation:navigation-ui:2.9.0'
+    implementation("androidx.navigation:navigation-fragment:2.9.7")
+    implementation("androidx.navigation:navigation-ui:2.9.7")
 
-    testImplementation "junit:junit:4.13.2"
-    androidTestImplementation "androidx.test:runner:1.6.2"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.6.1"
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test:runner:1.7.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
 }
 
-// Rename app
-android.applicationVariants.configureEach { variant ->
-    variant.outputs.configureEach {
-        def ourName = project.parent.name
-        outputFileName = "$ourName-${variant.name}-${variant.versionName}.apk"
-        println "out name= $outputFileName"
-    }
+// Rename app - Fixed for AGP 9.x using androidComponents
+androidComponents {
+    onVariants(selector().all(), { variant ->
+        variant.outputs.forEach { output ->
+            def ourName = project.parent.name
+            def buildType = variant.buildType
+            def versionStr = variant.outputs[0].versionName.get().replaceAll("-.*", "")
+            def flavor = variant.flavorName ?: ""
+            def newNameRoot = "${ourName}${flavor}-${buildType}-${versionStr}"
+            output.outputFileName.set("${newNameRoot}.apk")
+        }
+    })
 }
